@@ -1,11 +1,11 @@
 postgres:
-	docker run --name postgres -p 5432:5432 -e POSTGRES_USER=root -e POSTGRES_PASSWORD=secret -d postgres
+	docker run --name bank_postgres -p 5432:5432 -e POSTGRES_USER=root -e POSTGRES_PASSWORD=secret -d postgres
 
 createDb:
-	docker exec -it postgres --username=root --owner=root simple_bank
+	docker exec -it bank_postgres createdb --username=root --owner=root simple_bank
 
 dropDb:
-	docker exec -it postgres dropdb simple_bank
+	docker exec -it bank_postgres dropdb simple_bank
 
 migrateUp:
 	migrate -path db/migrations -database "postgresql://root:secret@localhost:5432/simple_bank?sslmode=disable" -verbose up
@@ -16,4 +16,7 @@ migrateDown:
 sqlc:
 	sqlc generate
 
-.PHONY: postgres createDb dropDb migrateUp migrateDown sqlc
+test:
+	go test -v -cover ./...
+
+.PHONY: postgres createDb dropDb migrateUp migrateDown sqlc test
