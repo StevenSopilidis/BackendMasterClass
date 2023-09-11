@@ -8,7 +8,7 @@ import (
 
 type Store interface {
 	Querier
-	TransferTx(ctx context.Context, arg TrasferTxParams) (TrasferTxResult, error)
+	TransferTx(ctx context.Context, arg TransferTxParams) (TransferTxResult, error)
 }
 
 // Provides functionality for executing db queries
@@ -44,13 +44,13 @@ func (store *SQLStore) execTx(ctx context.Context, fn func(*Queries) error) erro
 	return tx.Commit()
 }
 
-type TrasferTxParams struct {
+type TransferTxParams struct {
 	FromAccountId int64 `json:from_account_id`
 	ToAccountId   int64 `json:to_account_id`
 	Amount        int64 `json:amount`
 }
 
-type TrasferTxResult struct {
+type TransferTxResult struct {
 	Transfer    Transfer `json:transfer`
 	FromAccount Account  `json:from_account`
 	ToAccount   Account  `json:to_account`
@@ -63,8 +63,8 @@ type TrasferTxResult struct {
 // 1) Create a tranfer account
 // 2) Add account entries
 // 3) Update balance of the two accounts
-func (store *SQLStore) TransferTx(ctx context.Context, arg TrasferTxParams) (TrasferTxResult, error) {
-	var result TrasferTxResult
+func (store *SQLStore) TransferTx(ctx context.Context, arg TransferTxParams) (TransferTxResult, error) {
+	var result TransferTxResult
 
 	err := store.execTx(ctx, func(q *Queries) error {
 		var err error

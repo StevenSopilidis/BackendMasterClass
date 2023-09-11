@@ -21,12 +21,12 @@ func TestTransferTx(t *testing.T) {
 	amount := int64(10)
 
 	errs := make(chan error)
-	results := make(chan TrasferTxResult)
+	results := make(chan TransferTxResult)
 
 	for i := 0; i < n; i++ {
 		go func() {
 			ctx := context.Background()
-			result, err := store.TransferTx(ctx, TrasferTxParams{
+			result, err := store.TransferTx(ctx, TransferTxParams{
 				FromAccountId: account1.ID,
 				ToAccountId:   account2.ID,
 				Amount:        amount,
@@ -129,7 +129,7 @@ func TestTransferDeadLockTx(t *testing.T) {
 
 		go func() {
 			ctx := context.Background()
-			_, err := store.TransferTx(ctx, TrasferTxParams{
+			_, err := store.TransferTx(ctx, TransferTxParams{
 				FromAccountId: fromAccountId,
 				ToAccountId:   toAccountId,
 				Amount:        amount,

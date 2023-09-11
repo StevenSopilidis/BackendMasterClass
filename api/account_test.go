@@ -166,7 +166,7 @@ func TestCreateAccountApi(t *testing.T) {
 				}
 
 				store.EXPECT().
-					CreateAccount(gomock.Any(), arg).
+					CreateAccount(gomock.Any(), gomock.Eq(arg)).
 					Times(0)
 			},
 			expectedStatusCode: http.StatusBadRequest,
@@ -185,7 +185,7 @@ func TestCreateAccountApi(t *testing.T) {
 				}
 
 				store.EXPECT().
-					CreateAccount(gomock.Any(), arg).
+					CreateAccount(gomock.Any(), gomock.Eq(arg)).
 					Times(0)
 			},
 			expectedStatusCode: http.StatusBadRequest,
