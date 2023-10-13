@@ -12,7 +12,7 @@ import (
 )
 
 type createAccountRequest struct {
-	Currency string `json:"currency" binding:"required,oneof=currency"`
+	Currency string `json:"currency" binding:"required,currency"`
 }
 
 func (server *Server) createAccount(ctx *gin.Context) {
@@ -23,7 +23,6 @@ func (server *Server) createAccount(ctx *gin.Context) {
 	}
 
 	authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
-
 	arg := db.CreateAccountParams{
 		Owner:    authPayload.Username,
 		Currency: req.Currency,
@@ -38,10 +37,9 @@ func (server *Server) createAccount(ctx *gin.Context) {
 				ctx.JSON(http.StatusForbidden, errorResponse(err))
 				return
 			}
-			ctx.JSON(http.StatusInternalServerError, errorResponse(err))
-			return
 		}
-
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+		return
 	}
 
 	ctx.JSON(http.StatusOK, account)
