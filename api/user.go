@@ -116,20 +116,20 @@ func (server *Server) loginUser(ctx *gin.Context) {
 		return
 	}
 
-	refereshToken, refreshTokenPayload, err := server.tokenMaker.CreateToken(user.Username, server.config.RefreshTokenDuration)
+	refreshToken, refreshTokenTokenPayload, err := server.tokenMaker.CreateToken(user.Username, server.config.RefreshTokenDuration)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
 	}
 
 	session, err := server.store.CreateSession(ctx, db.CreateSessionParams{
-		ID:           refreshTokenPayload.ID,
+		ID:           refreshTokenTokenPayload.ID,
 		Username:     user.Username,
-		RefreshToken: refereshToken,
+		RefreshToken: refreshToken,
 		UserAgent:    ctx.Request.UserAgent(),
 		ClientIp:     ctx.ClientIP(),
 		IsBlocked:    false,
-		ExpiresAt:    refreshTokenPayload.ExpiredAt,
+		ExpiresAt:    refreshTokenTokenPayload.ExpiredAt,
 	})
 
 	if err != nil {
@@ -141,8 +141,8 @@ func (server *Server) loginUser(ctx *gin.Context) {
 		SessionID:             session.ID,
 		AccessToken:           accessToken,
 		AccessTokenExpiredAt:  accessTokenPayload.ExpiredAt,
-		RefreshToken:          refereshToken,
-		RefreshTokenExpiredAt: refreshTokenPayload.ExpiredAt,
+		RefreshToken:          refreshToken,
+		RefreshTokenExpiredAt: refreshTokenTokenPayload.ExpiredAt,
 		User:                  newUserResponse(user),
 	}
 	ctx.JSON(http.StatusOK, rsp)
