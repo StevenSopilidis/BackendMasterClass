@@ -13,6 +13,11 @@ import (
 	"github.com/StevenSopilidis/BackendMasterClass/gapi"
 	"github.com/StevenSopilidis/BackendMasterClass/pb"
 	"github.com/StevenSopilidis/BackendMasterClass/util"
+
+	"github.com/golang-migrate/migrate/v4"
+	_ "github.com/golang-migrate/migrate/v4/database/postgres"
+	_ "github.com/golang-migrate/migrate/v4/source/file"
+
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	_ "github.com/lib/pq"
 	"github.com/rakyll/statik/fs"
@@ -32,9 +37,25 @@ func main() {
 		log.Fatal("cannot connect to db:", err)
 	}
 
+	// run db migrations
+	runDBMigration(config.MigrationURL, config.DBSource)
+
 	store := db.NewStore(conn)
 	go runGatewayServer(config, store)
 	runGrpServer(config, store)
+}
+
+func runDBMigration(migrationUrl string, dbSource string) {
+	migration, err := migrate.New(migrationUrl, dbSource)
+	if err != nil {
+		log.Fatal("Could not create new migrate instance: ", err)
+	}
+
+	if err = migration.Up(); err != nil && err != migrate.ErrNoChange {
+		log.Fatal("Could not fun migrate up: ", err)
+	}
+
+	log.Println("Db migrated successfully")
 }
 
 func runGinServer(config util.Config, store db.Store) {
