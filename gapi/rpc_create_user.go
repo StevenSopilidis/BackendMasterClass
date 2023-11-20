@@ -4,7 +4,6 @@ import (
 	"context"
 
 	db "github.com/StevenSopilidis/BackendMasterClass/db/sqlc"
-	"github.com/StevenSopilidis/BackendMasterClass/pb"
 	"github.com/StevenSopilidis/BackendMasterClass/util"
 	"github.com/StevenSopilidis/BackendMasterClass/val"
 	"github.com/lib/pq"

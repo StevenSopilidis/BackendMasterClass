@@ -4,6 +4,7 @@ package pb;
 
 import "google/api/annotations.proto";
 import "rpc_create_user.proto";
+import "rpc_update_user.proto";
 import "rpc_login_user.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 
@@ -12,7 +13,7 @@ option go_package = "github.com/StevenSopilidis/BackendMasterClass/pb";
 option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
   info: {
     title: "BackendMasterclassAPI";
-    version: "1.0";
+    version: "1.2";
     contact: {
       name: "StevenSopilidis";
       url: "https://github.com/StevenSopilidis/BackendMasterClass";
@@ -27,7 +28,12 @@ service SimpleBank {
             post: "/v1/create_user"
             body: "*"
         };
-
+    }
+    rpc UpdateUser (UpdateUserRequest) returns (UpdateUserResponse) {
+      option (google.api.http) = {
+          patch: "/v1/update_user"
+          body: "*"
+      };
     }
     rpc LoginUser (LoginUserRequest) returns (LoginUserResponse) {
         option (google.api.http) = {
