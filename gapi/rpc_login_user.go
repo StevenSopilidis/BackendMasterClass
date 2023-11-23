@@ -5,6 +5,7 @@ import (
 	"database/sql"
 
 	db "github.com/StevenSopilidis/BackendMasterClass/db/sqlc"
+	"github.com/StevenSopilidis/BackendMasterClass/pb"
 	"github.com/StevenSopilidis/BackendMasterClass/util"
 	"github.com/StevenSopilidis/BackendMasterClass/val"
 	"google.golang.org/genproto/googleapis/rpc/errdetails"
